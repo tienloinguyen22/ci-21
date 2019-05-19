@@ -1,0 +1,91 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.banner {
+  background-image: url('./header-background.jpg');
+  width: 100%;
+  height: 400px;
+  background-size: cover;
+}
+
+.banner h1 {
+  color: #ffffff;
+  padding-top: 100px;
+  margin-left: 100px;
+}
+
+.banner p {
+  color: #ffffff;
+  margin-left: 100px;
+}
+
+.main-content {
+  background-color: #afafaf;
+  padding: 25px 20px;
+}
+
+.main-content p {
+  color: #878787;
+  margin-top: 10px;
+}
+
+.main-content .galery {
+  margin-top: 40px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+
+.main-content .galery .mexico {
+  background-image: url('./mexico.jpg');
+  background-size: cover;
+  background-position: center center;
+  width: 30%;
+  height: 150px;
+}
+
+.main-content .galery .tokyo {
+  background-image: url('./tokyo.jpg');
+  background-size: cover;
+  background-position: center center;
+  width: 30%;
+  height: 150px;
+}
+
+.main-content .galery .newyork {
+  background-image: url('./newyork.jpg');
+  background-size: cover;
+  width: 30%;
+  height: 150px;
+  background-position: center center;
+}
+
+.main-content .galery .paris {
+  background-image: url('./paris.jpg');
+  background-size: cover;
+  width: 30%;
+  height: 150px;
+}
+
+.main-content .galery .invite {
+  background-image: url('./paris.jpg');
+  background-size: cover;
+  background-position: center center;
+  width: 30%;
+  height: 300px;
+}
+
+.main-content .galery h4 {
+  color: white;
+}
+
+.main-content .galery .text-center {
+  /* text-align: center;
+  line-height: 150px; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
