@@ -34,6 +34,40 @@ view.setActiveScreen = (screenName) => {
       if (app) {
         app.innerHTML = components.registerPage;
       }
+
+      // listen link click
+      const loginLink = document.getElementById('login-link');
+      if (loginLink) {
+        loginLink.addEventListener('click', (event) => {
+          view.setActiveScreen('loginPage');
+        });
+      }
+
+      // listen form submit
+      const registerForm = document.getElementById('register-form');
+      if (registerForm) {
+        registerForm.addEventListener('submit', (event) => {
+          event.preventDefault();
+
+          controller.validateRegisterInfo(
+            registerForm.firstName.value,
+            registerForm.lastName.value,
+            registerForm.email.value,
+            registerForm.password.value,
+            registerForm.confirmPassword.value,
+          );
+        });
+      }
+      break;
+    case 'chatPage':
+      if (app) {
+        app.innerHTML = components.chatPage;
+      }
+      const welcomeEle = document.getElementById('welcome');
+      if (welcomeEle) {
+        welcomeEle.innerText = `Welcome back ${model.loginUser.email}`;
+      }
+      break;
   }
 };
 
@@ -41,5 +75,16 @@ view.renderErrorMessage = (elementId, errorMessage) => {
   const element = document.getElementById(elementId);
   if (element) {
     element.innerText = errorMessage;
+  }
+};
+
+view.clearRegisterInfo = () => {
+  const registerForm = document.getElementById('register-form');
+  if (registerForm) {
+    registerForm.firstName.value = '';
+    registerForm.lastName.value = '';
+    registerForm.email.value = '';
+    registerForm.password.value = '';
+    registerForm.confirmPassword.value = '';
   }
 };
