@@ -63,9 +63,20 @@ view.setActiveScreen = (screenName) => {
       if (app) {
         app.innerHTML = components.chatPage;
       }
-      const welcomeEle = document.getElementById('welcome');
-      if (welcomeEle) {
-        welcomeEle.innerText = `Welcome back ${model.loginUser.email}`;
+
+      // listen message form submit
+      const messageForm = document.getElementById('message-form');
+      if (messageForm) {
+        messageForm.addEventListener('submit', (event) => {
+          event.preventDefault();
+
+          const messageContainer = document.getElementById('message-container');
+          if (messageContainer && messageForm.message.value) {
+            view.sendMessage('', messageForm.message.value);
+            view.sendMessage('Mindx Bot', messageForm.message.value);
+            messageForm.message.value = '';
+          }
+        });
       }
       break;
   }
@@ -86,5 +97,40 @@ view.clearRegisterInfo = () => {
     registerForm.email.value = '';
     registerForm.password.value = '';
     registerForm.confirmPassword.value = '';
+  }
+};
+
+view.sendMessage = (sender, messageContent) => {
+  const messageContainer = document.getElementById('message-container');
+  if (messageContainer) {
+    // create 3 div element
+    const messageItem = document.createElement('div');
+    const senderElement = document.createElement('div');
+    const messageContentElement = document.createElement('div');
+
+    // modify div.message-item
+    messageItem.classList.add('message-item');
+    if (sender) {
+      messageItem.classList.add('other-message');
+    } else {
+      messageItem.classList.add('my-message');
+    }
+
+    // modify div.sender
+    senderElement.classList.add('sender');
+    if (sender) {
+      senderElement.innerText = sender;
+    }
+
+    // modify div.message-content
+    messageContentElement.classList.add('message-content');
+    messageContentElement.innerText = messageContent;
+
+    // assemble
+    messageItem.appendChild(senderElement);
+    messageItem.appendChild(messageContentElement);
+
+    // append to message-container
+    messageContainer.appendChild(messageItem);
   }
 };

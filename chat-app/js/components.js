@@ -106,5 +106,38 @@ components.registerPage = `
 `;
 
 components.chatPage = `
-  <div id='welcome'>Login success!!</div>
+<div class='chat-screen' id='chat-screen'>
+  <div class='header'>Mindx Chats</div>
+  <div class='chat-container'>
+    <div class='conversation-name'>
+      <h3>First conversation</h3>
+    </div>
+    <div id='message-container' class='message-container'>
+      <div class='message-item my-message'>
+        <div class='sender'>Tien Loi</div>
+        <div class='message-content'>Lorem Ipsum is simply dummy text of the printing and typesetting industry</div>
+      </div>
+
+      <div class='message-item other-message'>
+        <div class='sender'>Tien Loi</div>
+        <div class='message-content'>Lorem Ipsum is simply dummy text of the printing and typesetting industry</div>
+      </div>
+    </div>
+    <div class='message-form-container'>
+      <form id='message-form'>
+        <input
+          class='message-input'
+          type='text'
+          placeholder='Type a message ...'
+          name='message'
+        />
+        <input
+          class='send-button'
+          type='submit'
+          value='Send'
+        />
+      </form>
+    </div>
+  </div>
+  </div>
 `;
