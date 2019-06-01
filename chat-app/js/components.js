@@ -113,15 +113,7 @@ components.chatPage = `
       <h3>First conversation</h3>
     </div>
     <div id='message-container' class='message-container'>
-      <div class='message-item my-message'>
-        <div class='sender'>Tien Loi</div>
-        <div class='message-content'>Lorem Ipsum is simply dummy text of the printing and typesetting industry</div>
-      </div>
-
-      <div class='message-item other-message'>
-        <div class='sender'>Tien Loi</div>
-        <div class='message-content'>Lorem Ipsum is simply dummy text of the printing and typesetting industry</div>
-      </div>
+    
     </div>
     <div class='message-form-container'>
       <form id='message-form'>

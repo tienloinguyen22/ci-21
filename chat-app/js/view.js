@@ -64,6 +64,9 @@ view.setActiveScreen = (screenName) => {
         app.innerHTML = components.chatPage;
       }
 
+      // load all conversations
+      model.loadConversations();
+
       // listen message form submit
       const messageForm = document.getElementById('message-form');
       if (messageForm) {
@@ -72,8 +75,10 @@ view.setActiveScreen = (screenName) => {
 
           const messageContainer = document.getElementById('message-container');
           if (messageContainer && messageForm.message.value) {
-            view.sendMessage('', messageForm.message.value);
-            view.sendMessage('Mindx Bot', messageForm.message.value);
+            // save to database
+            model.saveMessage(messageForm.message.value);
+            
+            // clear input
             messageForm.message.value = '';
           }
         });
@@ -132,5 +137,8 @@ view.sendMessage = (sender, messageContent) => {
 
     // append to message-container
     messageContainer.appendChild(messageItem);
+
+    // scroll
+    messageContainer.scrollTop = messageContainer.scrollHeight;
   }
 };

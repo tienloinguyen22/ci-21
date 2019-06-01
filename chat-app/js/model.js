@@ -2,6 +2,8 @@ const model = {};
 
 model.loginUser = undefined;
 
+model.conversations = undefined;
+
 model.createNewUser = (
   firstName,
   lastName,
@@ -45,5 +47,63 @@ model.loginUser = (email, password) => {
     .catch((error) => {
       console.log(error);
       window.alert(error.message);
+    });
+};
+
+model.saveMessage = (newMessageContent) => {
+  const newMessage = {
+    content: newMessageContent,
+    user: model.loginUser.email,
+    createdAt: new Date(),
+  };
+
+  const db = firebase.firestore();
+  db.collection('conversations')
+    .doc('EYa0czWZhA3IOcyiFQ8n')
+    .update({
+      messages: firebase.firestore.FieldValue.arrayUnion(newMessage),
+    });
+};
+
+model.loadConversations = () => {
+  const db = firebase.firestore();
+  db.collection('conversations')
+    .where('users', 'array-contains', model.loginUser.email)
+    .onSnapshot((snapshot) => {
+      const conversations = [];
+
+      snapshot.docs.forEach((item) => {
+        const conversation = item.data();
+        conversation.id = item.id;
+        conversations.push(conversation);
+      });
+
+      const activeConversation = conversations[0];
+
+      if (model.conversations) {
+        // render last message
+        if (activeConversation) {
+          // render message
+          const newMessage = activeConversation.messages[activeConversation.messages.length - 1];
+          if (newMessage.user === model.loginUser.email) {
+            view.sendMessage('', newMessage.content);
+          } else {
+            view.sendMessage(newMessage.user, newMessage.content);
+          }
+        }
+      } else {
+        // render all message
+        model.conversations = conversations;
+
+        if (activeConversation) {
+          activeConversation.messages.forEach((mess) => {
+            if (mess.user === model.loginUser.email) {
+              view.sendMessage('', mess.content);
+            } else {
+              view.sendMessage(mess.user, mess.content);
+            }
+          });
+        }
+      }
     });
 };
