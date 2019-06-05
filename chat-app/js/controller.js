@@ -79,3 +79,44 @@ controller.validateRegisterInfo = (
     );
   }
 };
+
+controller.validateConversationInfo = (conversationName, userEmail) => {
+  if (!conversationName) {
+    view.renderErrorMessage(
+      'conversation-name-error-message',
+      `Please input conversation name`,
+    );
+  } else {
+    view.renderErrorMessage(
+      'conversation-name-error-message',
+      '',
+    );
+  }
+
+  if (!userEmail) {
+    view.renderErrorMessage(
+      'user-email-error-message',
+      'Please input email address',
+    );
+  } else if (!emailRegex.test(userEmail)) {
+    view.renderErrorMessage(
+      'user-email-error-message',
+      'Invalid email address',
+    );
+  } else if (userEmail === model.loginUser.email) {
+    view.renderErrorMessage(
+      'user-email-error-message',
+      'You cant input your own email',
+    );
+  } else {
+    view.renderErrorMessage(
+      'user-email-error-message',
+      '',
+    );
+  }
+
+  if (conversationName && userEmail && emailRegex.test(userEmail) && userEmail !== model.loginUser.email) {
+    // call model
+    model.createConversation(conversationName, userEmail);
+  }
+};

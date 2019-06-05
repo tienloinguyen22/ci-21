@@ -67,6 +67,15 @@ view.setActiveScreen = (screenName) => {
       // load all conversations
       model.loadConversations();
 
+      // listen createConversation click
+      const createConversationBtn = document.getElementById('create-conversation-btn');
+      if (createConversationBtn) {
+        createConversationBtn.addEventListener(`click`, () => {
+          model.clearConversations();
+          view.setActiveScreen('createConversationPage');
+        });
+      }
+
       // listen message form submit
       const messageForm = document.getElementById('message-form');
       if (messageForm) {
@@ -83,6 +92,36 @@ view.setActiveScreen = (screenName) => {
           }
         });
       }
+      break;
+    case `createConversationPage`:
+      if (app) {
+        app.innerHTML = components.createConversationPage;
+      }
+
+      // listen form submit
+      const createConversationForm = document.getElementById('create-conversation-form');
+      if (createConversationForm) {
+        createConversationForm.addEventListener('submit', (event) => {
+          event.preventDefault();
+
+          const conversationName = createConversationForm.conversationName.value;
+          const userEmail = createConversationForm.userEmail.value;
+
+          controller.validateConversationInfo(
+            conversationName,
+            userEmail,
+          );
+        });
+      }
+
+      // listen cancel click
+      const cancelCreateConversationBtn = document.getElementById('cancel-create-conversation');
+      if (cancelCreateConversationBtn) {
+        cancelCreateConversationBtn.addEventListener('click', () => {
+          view.setActiveScreen(`chatPage`);
+        });
+      }
+
       break;
   }
 };
@@ -140,5 +179,20 @@ view.sendMessage = (sender, messageContent) => {
 
     // scroll
     messageContainer.scrollTop = messageContainer.scrollHeight;
+  }
+};
+
+view.renderConversationItem = (conversation) => {
+  const conversationListContent = document.getElementById('conversation-list-content');
+  if (conversationListContent) {
+    const conversationItemElelement = document.createElement('div');
+    conversationItemElelement.classList.add('conversation-item');
+    conversationItemElelement.innerText = conversation.name;
+
+    if (conversation.id === model.activeConversation.id) {
+      conversationItemElelement.classList.add('active-conversation');
+    }
+
+    conversationListContent.appendChild(conversationItemElelement);
   }
 };

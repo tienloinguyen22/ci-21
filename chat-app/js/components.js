@@ -107,13 +107,24 @@ components.registerPage = `
 
 components.chatPage = `
 <div class='chat-screen' id='chat-screen'>
-  <div class='header'>Mindx Chats</div>
-  <div class='chat-container'>
+<div class='header'>Mindx Chats</div>
+
+<div class='chat-container'>
+  <div class='conversation-list'>
+    <div class='add-conversation'>
+      <button class='btn' id='create-conversation-btn'>+ New Conversation</button>
+    </div>
+    <div id='conversation-list-content' class='conversation-list-content'>
+    </div>
+  </div>
+
+  <div class='chat-content'>
     <div class='conversation-name'>
       <h3>First conversation</h3>
     </div>
+
     <div id='message-container' class='message-container'>
-    
+
     </div>
     <div class='message-form-container'>
       <form id='message-form'>
@@ -131,5 +142,41 @@ components.chatPage = `
       </form>
     </div>
   </div>
-  </div>
+</div>
+</div>
+`;
+
+components.createConversationPage = `
+<div id='create-conversation-screen' class='create-conversation-screen'>
+    <div class='header'>Mindx Chats</div>
+
+    <div class='create-conversation-content'>
+      <h3>Create a new conversation</h3>
+
+      <form id='create-conversation-form'>
+        <div class='input-wrapper'>
+          <input
+            class='input'
+            type='text'
+            name='conversationName'
+            placeholder="Conversation name"
+          />
+          <div class='error' id='conversation-name-error-message'></div>
+        </div>
+        <div class='input-wrapper'>
+          <input
+            class='input'
+            type='text'
+            name='userEmail'
+            placeholder="User email"
+          />
+          <div class='error' id='user-email-error-message'></div>
+        </div>
+        <div>
+          <input class='btn' type='submit' value='Create' />
+          <button id='cancel-create-conversation' class='secondary-btn'>Cancel</button>
+        </div>
+      </form>
+    </div>
+</div>
 `;

@@ -4,6 +4,10 @@ model.loginUser = undefined;
 
 model.conversations = undefined;
 
+model.activeConversation = undefined;
+
+model.listener = undefined;
+
 model.createNewUser = (
   firstName,
   lastName,
@@ -67,7 +71,7 @@ model.saveMessage = (newMessageContent) => {
 
 model.loadConversations = () => {
   const db = firebase.firestore();
-  db.collection('conversations')
+  model.listener = db.collection('conversations')
     .where('users', 'array-contains', model.loginUser.email)
     .onSnapshot((snapshot) => {
       const conversations = [];
@@ -79,6 +83,7 @@ model.loadConversations = () => {
       });
 
       const activeConversation = conversations[0];
+      model.activeConversation = activeConversation;
 
       if (model.conversations) {
         // render last message
@@ -104,6 +109,36 @@ model.loadConversations = () => {
             }
           });
         }
+
+        // render all conversation
+        model.conversations.forEach((item) => {
+          view.renderConversationItem(item);
+        });
       }
+    });
+};
+
+model.clearConversations = () => {
+  model.conversations = undefined;
+  model.activeConversation = undefined;
+  model.listener();
+};
+
+model.createConversation = (conversationName, userEmail) => {
+  const db = firebase.firestore();
+
+  const newConversation = {
+    name: conversationName,
+    users: [userEmail, model.loginUser.email],
+    createdAt: new Date(),
+    messages: [],
+  };
+  db.collection('conversations').add(newConversation)
+    .then(() => {
+      view.setActiveScreen('chatPage');
+    })
+    .catch((error) => {
+      console.log(error);
+      window.alert(error.message);
     });
 };
