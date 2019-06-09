@@ -67,6 +67,14 @@ view.setActiveScreen = (screenName) => {
       // load all conversations
       model.loadConversations();
 
+      // list input focus
+      const messageInputElement = document.getElementById('message-input');
+      if (messageInputElement) {
+        messageInputElement.addEventListener('focus', () => {
+          view.removeNotification(model.activeConversation.id);
+        });
+      }
+
       // listen createConversation click
       const createConversationBtn = document.getElementById('create-conversation-btn');
       if (createConversationBtn) {
@@ -186,6 +194,7 @@ view.renderConversationItem = (conversation) => {
   const conversationListContent = document.getElementById('conversation-list-content');
   if (conversationListContent) {
     const conversationItemElelement = document.createElement('div');
+    conversationItemElelement.id = conversation.id;
     conversationItemElelement.classList.add('conversation-item');
     conversationItemElelement.innerText = conversation.name;
 
@@ -193,6 +202,67 @@ view.renderConversationItem = (conversation) => {
       conversationItemElelement.classList.add('active-conversation');
     }
 
+    // listen click event
+    conversationItemElelement.addEventListener('click', () => {
+      let conversationInfo;
+      model.conversations.forEach((item) => {
+        if (item.id === conversation.id) {
+          conversationInfo = item;
+        }
+      });
+
+      // remove notification
+      view.removeNotification(conversation.id);
+
+      // update model.activeConversation
+      model.changeActiveConversation(conversation);
+
+      // update .active-conversation (style)
+      const activeConversationElement = document.querySelector('.active-conversation');
+      if (activeConversationElement) {
+        activeConversationElement.classList.remove('active-conversation');
+      }
+      conversationItemElelement.classList.add('active-conversation');
+
+      // update message container
+      const messageContainerElement = document.getElementById('message-container');
+      if (messageContainerElement) {
+        messageContainerElement.innerText = '';
+      }
+      conversationInfo.messages.forEach((item) => {
+        if (item.user === model.loginUser.email) {
+          view.sendMessage('', item.content);
+        } else {
+          view.sendMessage(item.user, item.content);
+        }
+      });
+    });
+
     conversationListContent.appendChild(conversationItemElelement);
+  }
+};
+
+view.renderNotification = (conversationId) => {
+  const conversationItemElement = document.getElementById(conversationId);
+  if (conversationItemElement) {
+    // check exist notification
+    const existedNotificationElement = conversationItemElement.querySelector('.notification');
+    if (!existedNotificationElement) {
+      // display noti
+      const notiElement = document.createElement('span');
+      notiElement.classList.add('notification');
+
+      conversationItemElement.appendChild(notiElement);
+    }
+  }
+};
+
+view.removeNotification = (conversationId) => {
+  const conversationItemElement = document.getElementById(conversationId);
+  if (conversationItemElement) {
+    const existedNotificationElement = conversationItemElement.querySelector('.notification');
+    if (existedNotificationElement) {
+      conversationItemElement.removeChild(existedNotificationElement);
+    }
   }
 };

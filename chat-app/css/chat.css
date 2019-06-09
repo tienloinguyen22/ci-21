@@ -31,6 +31,11 @@
   border-bottom: 1px solid #e9e9e9;
 }
 
+.chat-screen .conversation-list .conversation-list-content {
+  height: calc(100vh - 128px);
+  overflow-y: auto;
+}
+
 .chat-screen .chat-container .chat-content {
   height: calc(100vh - 64px);
 }
@@ -121,4 +126,13 @@
 
 .active-conversation {
   background-color: rgba(0, 0, 0, .05);
+}
+
+.notification {
+  margin-left: 5px;
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #fc5353;
 }

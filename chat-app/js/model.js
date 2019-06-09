@@ -63,7 +63,7 @@ model.saveMessage = (newMessageContent) => {
 
   const db = firebase.firestore();
   db.collection('conversations')
-    .doc('EYa0czWZhA3IOcyiFQ8n')
+    .doc(model.activeConversation.id)
     .update({
       messages: firebase.firestore.FieldValue.arrayUnion(newMessage),
     });
@@ -76,32 +76,58 @@ model.loadConversations = () => {
     .onSnapshot((snapshot) => {
       const conversations = [];
 
-      snapshot.docs.forEach((item) => {
-        const conversation = item.data();
-        conversation.id = item.id;
+      snapshot.docChanges().forEach((item) => {
+        const conversation = item.doc.data();
+        conversation.id = item.doc.id;
         conversations.push(conversation);
       });
 
-      const activeConversation = conversations[0];
-      model.activeConversation = activeConversation;
-
       if (model.conversations) {
-        // render last message
-        if (activeConversation) {
-          // render message
-          const newMessage = activeConversation.messages[activeConversation.messages.length - 1];
-          if (newMessage.user === model.loginUser.email) {
-            view.sendMessage('', newMessage.content);
-          } else {
-            view.sendMessage(newMessage.user, newMessage.content);
+        conversations.forEach((item) => {
+          // check new message or new conversation
+          let isNewConversation = true;
+          for (let i = 0; i < model.conversations.length; i += 1) {
+            if (model.conversations[i].id === item.id) {
+              isNewConversation = false;
+              break;
+            }
           }
-        }
+
+          for (let i = 0; i < model.conversations.length; i += 1) {
+            if (model.conversations[i].id === item.id) {
+              model.conversations[i] = item;
+              const lastMessage = item.messages[item.messages.length - 1];
+              
+              if (lastMessage.user !== model.loginUser.email) {
+                view.renderNotification(item.id);
+              }
+            }
+          }
+
+          if (isNewConversation) {
+            // render conversation item
+            model.conversations.push(item);
+            view.renderConversationItem(item);
+            view.renderNotification(item.id);
+          } else {
+            // render last message
+            if (item.id === model.activeConversation.id) {
+              const newMessage = item.messages[item.messages.length - 1];
+
+              if (newMessage.user === model.loginUser.email) {
+                view.sendMessage('', newMessage.content);
+              } else {
+                view.sendMessage(newMessage.user, newMessage.content);
+              }
+            }
+          }
+        });
       } else {
-        // render all message
+        model.activeConversation = conversations[0];
         model.conversations = conversations;
 
-        if (activeConversation) {
-          activeConversation.messages.forEach((mess) => {
+        if (model.activeConversation) {
+          model.activeConversation.messages.forEach((mess) => {
             if (mess.user === model.loginUser.email) {
               view.sendMessage('', mess.content);
             } else {
@@ -141,4 +167,8 @@ model.createConversation = (conversationName, userEmail) => {
       console.log(error);
       window.alert(error.message);
     });
+};
+
+model.changeActiveConversation = (newActiveConversation) => {
+  model.activeConversation = newActiveConversation;
 };

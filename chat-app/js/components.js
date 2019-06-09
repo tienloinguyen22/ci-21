@@ -129,6 +129,7 @@ components.chatPage = `
     <div class='message-form-container'>
       <form id='message-form'>
         <input
+          id='message-input'
           class='message-input'
           type='text'
           placeholder='Type a message ...'
