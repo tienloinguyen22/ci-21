@@ -14,7 +14,68 @@
 </head>
 <body>
   <div id='app'>
-    
+    <div class='chat-screen' id='chat-screen'>
+    <div class='header'>Mindx Chats</div>
+
+    <div class='chat-container'>
+      <div class='conversation-list'>
+        <div class='add-conversation'>
+          <button class='btn' id='create-conversation-btn'>+ New Conversation</button>
+        </div>
+        <div id='conversation-list-content' class='conversation-list-content'>
+        </div>
+      </div>
+
+      <div class='chat-content'>
+        <div class='conversation-name'>
+          <h3>First conversation</h3>
+        </div>
+
+        <div id='message-container' class='message-container'>
+
+        </div>
+        <div class='message-form-container'>
+          <form id='message-form'>
+            <input
+              id='message-input'
+              class='message-input'
+              type='text'
+              placeholder='Type a message ...'
+              name='message'
+            />
+            <input
+              class='send-button'
+              type='submit'
+              value='Send'
+            />
+          </form>
+        </div>
+      </div>
+
+      <div class='conversation-members'>
+        <div class='member-list'>
+          <div class='member-item'>#tienloinguyen22@gmail.com</div>
+          <div class='member-item'>#tienloinguyen22@gmail.com</div>
+          <div class='member-item'>#tienloinguyen22@gmail.com</div>
+        </div>
+        <form class='add-member-form'>
+          <div class='input-wrapper'>
+            <input
+              class='input'
+              type='text'
+              name='memberEmail'
+              placeholder="Email ..."
+            />
+            <div class='error' id='member-email-error-message'></div>
+          </div>
+
+          <div>
+            <input class='btn' type='submit' value='Add member' />
+          </div>
+        </form>
+      </div>
+    </div>
+    </div>
   </div>
 
   <script src="https://www.gstatic.com/firebasejs/6.0.4/firebase-app.js"></script>

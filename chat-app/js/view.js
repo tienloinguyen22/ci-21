@@ -64,6 +64,18 @@ view.setActiveScreen = (screenName) => {
         app.innerHTML = components.chatPage;
       }
 
+      // listen media query
+      const mediaQueryResult = window.matchMedia('only screen and (max-width: 768px)');
+      mediaQueryResult.addListener((mediaQuery) => {
+        if (mediaQuery.matches) {
+          // render small conversation item
+          view.renderSmallConversationItem();
+        } else {
+          // render big conversation item
+          view.renderBigConversationItem();
+        }
+      });
+
       // load all conversations
       model.loadConversations();
 
@@ -194,9 +206,25 @@ view.renderConversationItem = (conversation) => {
   const conversationListContent = document.getElementById('conversation-list-content');
   if (conversationListContent) {
     const conversationItemElelement = document.createElement('div');
+    const mediaQueryResult = window.matchMedia('only screen and (max-width: 768px)');
     conversationItemElelement.id = conversation.id;
     conversationItemElelement.classList.add('conversation-item');
-    conversationItemElelement.innerText = conversation.name;
+    conversationItemElelement.setAttribute('data-conversation-name', conversation.name);
+    if (mediaQueryResult.matches) {
+      // first letter
+      conversationItemElelement.innerText = conversation.name[0].toUpperCase();
+      const createConversationButton = document.getElementById('create-conversation-btn');
+      if (createConversationButton) {
+        createConversationButton.innerText = '+';
+      }
+    } else {
+      // full name
+      conversationItemElelement.innerText = conversation.name;
+      const createConversationButton = document.getElementById('create-conversation-btn');
+      if (createConversationButton) {
+        createConversationButton.innerText = '+ New Conversation';
+      }
+    }
 
     if (conversation.id === model.activeConversation.id) {
       conversationItemElelement.classList.add('active-conversation');
@@ -264,5 +292,35 @@ view.removeNotification = (conversationId) => {
     if (existedNotificationElement) {
       conversationItemElement.removeChild(existedNotificationElement);
     }
+  }
+};
+
+view.renderSmallConversationItem = () => {
+  const conversationItemElements = document.getElementsByClassName('conversation-item');
+
+  for (let element of conversationItemElements) {
+    const conversationName = element.innerText;
+    const firstLetter = conversationName[0];
+
+    element.innerText = firstLetter.toUpperCase();
+  }
+
+  const createConversationButton = document.getElementById('create-conversation-btn');
+  if (createConversationButton) {
+    createConversationButton.innerText = '+';
+  }
+};
+
+view.renderBigConversationItem = () => {
+  const conversationItemElements = document.getElementsByClassName('conversation-item');
+
+  for (let element of conversationItemElements) {
+    const fullName = element.getAttribute('data-conversation-name');
+    element.innerText = fullName;
+  }
+
+  const createConversationButton = document.getElementById('create-conversation-btn');
+  if (createConversationButton) {
+    createConversationButton.innerText = '+ New conversation';
   }
 };
